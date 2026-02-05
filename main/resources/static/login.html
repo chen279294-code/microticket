@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登录 - 微票电影购票系统</title>
+  <style>
+    :root{
+      --card-bg: rgba(255,255,255,.65);
+      --card-border: rgba(255,255,255,.55);
+      --text: #0f172a;
+      --muted: rgba(15,23,42,.7);
+      --primary: #ff6a2a;
+      --primary2: #ff5a1f;
+      --shadow: 0 18px 60px rgba(0,0,0,.18);
+      --radius: 14px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      min-height:100vh;
+      font-family:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,"PingFang SC","Microsoft YaHei";
+      color:var(--text);
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.08), rgba(0,0,0,.08)),
+        url('/assets/login-bg.png') center/cover no-repeat fixed;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .panel{
+      width:min(520px, 92vw);
+      background:var(--card-bg);
+      border:1px solid var(--card-border);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding:26px 26px 22px;
+    }
+    h1{
+      margin:0 0 16px;
+      text-align:center;
+      font-size:22px;
+      letter-spacing:.5px;
+      color:#1e40af;
+      font-weight:800;
+    }
+    .tabs{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      margin-bottom:14px;
+    }
+    .tab{
+      border:1px solid rgba(15,23,42,.15);
+      background:rgba(255,255,255,.55);
+      padding:8px 14px;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:650;
+      color:rgba(15,23,42,.75);
+      user-select:none;
+    }
+    .tab.active{
+      border-color:rgba(255,106,42,.55);
+      background:rgba(255,106,42,.15);
+      color:#9a3412;
+    }
+    .form{display:none}
+    .form.active{display:block}
+    .field{margin:12px 0}
+    .label{font-size:12px;color:var(--muted);margin:0 0 6px}
+    input{
+      width:100%;
+      padding:12px 12px;
+      border:1px solid rgba(15,23,42,.18);
+      border-radius:10px;
+      background:rgba(255,255,255,.9);
+      outline:none;
+      font-size:14px;
+    }
+    input:focus{border-color:rgba(255,106,42,.65);box-shadow:0 0 0 3px rgba(255,106,42,.18)}
+    .btn{
+      width:100%;
+      padding:12px 14px;
+      border:0;
+      border-radius:12px;
+      background:linear-gradient(180deg,var(--primary),var(--primary2));
+      color:white;
+      font-weight:800;
+      cursor:pointer;
+      margin-top:8px;
+      letter-spacing:1px;
+    }
+    .btn:active{transform:translateY(1px)}
+    .hint{
+      text-align:right;
+      margin-top:10px;
+      font-size:13px;
+      color:rgba(30,64,175,.95);
+      cursor:pointer;
+      user-select:none;
+    }
+    .err{color:#b00020;margin-top:10px;white-space:pre-wrap;font-size:13px}
+    .muted{color:var(--muted);font-size:12px;margin-top:10px;line-height:1.5}
+    .kbd{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New";background:rgba(15,23,42,.07);padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <h1>欢迎登录微票电影购票系统</h1>
+
+    <div class="tabs">
+      <div class="tab active" id="tab_login">登录</div>
+      <div class="tab" id="tab_register">注册</div>
+    </div>
+
+    <!-- 登录 -->
+    <div class="form active" id="form_login">
+      <div class="field">
+        <div class="label">账号</div>
+        <input id="login_username" placeholder="请输入账号" autocomplete="username" />
+      </div>
+      <div class="field">
+        <div class="label">密码</div>
+        <input id="login_password" placeholder="请输入密码" type="password" autocomplete="current-password" />
+      </div>
+      <button class="btn" id="btn_login">登 录</button>
+      <div class="hint" id="go_register">还没有账号？请 注册</div>
+      <div class="err" id="login_err"></div>
+      <div class="muted">
+        说明：登录页管理员/用户共用。系统会根据 <span class="kbd">role</span> 自动跳转到管理页或用户页。
+      </div>
+    </div>
+
+    <!-- 注册（默认普通用户） -->
+    <div class="form" id="form_register">
+      <div class="field">
+        <div class="label">账号（>=3位）</div>
+        <input id="reg_username" placeholder="请输入账号" autocomplete="username" />
+      </div>
+      <div class="field">
+        <div class="label">密码（>=6位）</div>
+        <input id="reg_password" placeholder="请输入密码" type="password" autocomplete="new-password" />
+      </div>
+      <div class="field">
+        <div class="label">昵称（可选，不填则默认=账号）</div>
+        <input id="reg_nickname" placeholder="请输入昵称" />
+      </div>
+      <div class="field">
+        <div class="label">邮箱（可选）</div>
+        <input id="reg_email" placeholder="请输入邮箱" />
+      </div>
+      <button class="btn" id="btn_register">注 册</button>
+      <div class="hint" id="go_login">已有账号？去 登录</div>
+      <div class="err" id="reg_err"></div>
+      <div class="muted">
+        注册账号默认为普通用户（USER）。注册成功后会生成“昵称标识”，格式：<span class="kbd">昵称#标识</span>，用于让管理员精准搜索授权。
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "";
+
+    function setActiveTab(which){
+      const isLogin = which === 'login';
+      document.getElementById('tab_login').classList.toggle('active', isLogin);
+      document.getElementById('tab_register').classList.toggle('active', !isLogin);
+      document.getElementById('form_login').classList.toggle('active', isLogin);
+      document.getElementById('form_register').classList.toggle('active', !isLogin);
+      document.getElementById('login_err').textContent = '';
+      document.getElementById('reg_err').textContent = '';
+    }
+
+    document.getElementById('tab_login').onclick = () => setActiveTab('login');
+    document.getElementById('tab_register').onclick = () => setActiveTab('register');
+    document.getElementById('go_register').onclick = () => setActiveTab('register');
+    document.getElementById('go_login').onclick = () => setActiveTab('login');
+
+    function saveAuth(resp){
+      localStorage.setItem("token", resp.token);
+      localStorage.setItem("role", resp.role);
+      localStorage.setItem("username", resp.username);
+      localStorage.setItem("userId", String(resp.userId));
+      if(resp.nicknameDisplay) localStorage.setItem("nicknameDisplay", resp.nicknameDisplay);
+    }
+
+    async function postJson(url, body){
+      const res = await fetch(API_BASE + url, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify(body)
+      });
+      const text = await res.text();
+      let data = null;
+      try{ data = text ? JSON.parse(text) : null; }catch(e){ data = {message:text}; }
+      if(!res.ok){
+        throw new Error(data?.message || ("HTTP " + res.status));
+      }
+      return data;
+    }
+
+    document.getElementById("btn_login").onclick = async () => {
+      document.getElementById("login_err").textContent = "";
+      try{
+        const username = document.getElementById("login_username").value.trim();
+        const password = document.getElementById("login_password").value;
+        const resp = await postJson("/api/auth/login", {username, password});
+        saveAuth(resp);
+        if(resp.role === "ADMIN") window.location.href = "/admin/index.html";
+        else window.location.href = "/user/index.html";
+      }catch(e){
+        document.getElementById("login_err").textContent = e.message;
+      }
+    };
+
+    document.getElementById("btn_register").onclick = async () => {
+      document.getElementById("reg_err").textContent = "";
+      try{
+        const username = document.getElementById("reg_username").value.trim();
+        const password = document.getElementById("reg_password").value;
+        const nickname = document.getElementById("reg_nickname").value.trim() || null;
+        const email = document.getElementById("reg_email").value.trim() || null;
+        const resp = await postJson("/api/auth/register", {username, password, email, nickname});
+        saveAuth(resp);
+        if(resp.nicknameDisplay){
+          alert("注册成功！你的昵称标识为：" + resp.nicknameDisplay + "\n\n请把它发给管理员（admin）用于搜索授权。");
+        }
+        window.location.href = "/user/index.html";
+      }catch(e){
+        document.getElementById("reg_err").textContent = e.message;
+      }
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>微票电影购票系统 - 管理后台</title>
+  <link rel="stylesheet" href="/admin/admin.css"/>
+</head>
+<body>
+<div class="layout">
+
+  <!-- 顶部栏 -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo-dot"></div>
+      <div class="brand-title">微票电影购票网站</div>
+    </div>
+
+    <div class="breadcrumb">首页 / 系统首页</div>
+
+    <div class="topbar-right">
+      <div class="avatar" title="管理员"></div>
+      <div class="role-badge">管理员</div>
+      <button class="btn btn-ghost" id="btnLogout">退出</button>
+    </div>
+  </header>
+
+  <!-- 左侧菜单 -->
+  <aside class="sidebar">
+    <div class="menu">
+
+      <div class="menu-item active" data-view="dashboard">
+        <span class="icon">🏠</span><span>系统首页</span>
+      </div>
+
+      <!-- 信息管理：可折叠 -->
+      <div class="menu-group" data-group="info" data-expanded="true">
+        <div class="menu-group-title" data-toggle="group">
+          <div class="left">
+            <span class="icon">🗂️</span><span>信息管理</span>
+          </div>
+          <span class="caret">▾</span>
+        </div>
+
+        <div class="menu-sub">
+          <div class="menu-item" data-view="movieType">电影类型</div>
+          <div class="menu-item" data-view="movieArea">电影区域</div>
+          <div class="menu-item" data-view="movieInfo">电影信息</div>
+          <div class="menu-item" data-view="trailer">电影预告视频</div>
+          <div class="menu-item" data-view="cast">演职人员</div>
+          <div class="menu-item" data-view="hall">影厅房间</div>
+          <div class="menu-item" data-view="show">放映记录</div>
+          <div class="menu-item" data-view="order">购票订单</div>
+          <div class="menu-item" data-view="comment">用户评价</div>
+        </div>
+      </div>
+      <!-- 用户信息：可折叠 -->
+      <div class="menu-group" data-group="user" data-expanded="true">
+        <div class="menu-group-title" data-toggle="group">
+          <div class="left">
+            <span class="icon">👤</span><span>用户信息</span>
+          </div>
+          <span class="caret">▾</span>
+        </div>
+        <div class="menu-sub">
+          <div class="menu-item" data-view="users">用户信息（授权）</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+
+  <!-- 右侧内容区 -->
+  <main class="content">
+
+    <!-- 仪表盘（仿截图：4个指标卡 + 图表占位） -->
+    <section class="view" id="view-dashboard">
+      <div class="cards">
+        <div class="stat-card">
+          <div class="stat-icon red">🎬</div>
+          <div class="stat-title">电影数量</div>
+          <div class="stat-value" id="statMovieCount">--</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon orange">🏠</div>
+          <div class="stat-title">入驻影院</div>
+          <div class="stat-value" id="statCinemaCount">--</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon wine">￥</div>
+          <div class="stat-title">今日票房</div>
+          <div class="stat-value" id="statTodayBox">--</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon gold">💰</div>
+          <div class="stat-title">总计票房</div>
+          <div class="stat-value" id="statTotalBox">--</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">近一周每日票房变化折线图</div>
+        <div class="panel-subtitle">统计维度：电影每日票房</div>
+        <div id="chartLine" class="chart-box"></div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-title">不同类型电影数量分布饼状图</div>
+          <div class="panel-subtitle">统计维度：电影数量</div>
+          <div id="chartPie" class="chart-box small"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title">不同类型电影总票房柱状图</div>
+          <div class="panel-subtitle">统计维度：电影票房</div>
+          <div id="chartBar" class="chart-box small"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ✅ 用户信息视图（含搜索 + 授权按钮） -->
+    <section class="view hidden" id="view-users">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="panel-title">用户信息</div>
+            <div class="panel-subtitle">在这里搜索普通用户并授权为管理员</div>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <input class="input" id="searchKey" placeholder="输入 昵称#标识 或 用户名 进行搜索（例：小明#4831）"/>
+          <button class="btn" id="btnSearch">搜索</button>
+          <button class="btn btn-ghost" id="btnReload">刷新列表</button>
+        </div>
+
+        <div class="hint" id="hintBox"></div>
+
+        <div class="table-wrap">
+          <table class="table">
+            <thead>
+            <tr>
+              <th style="width:80px;">ID</th>
+              <th>用户名</th>
+              <th>昵称标识</th>
+              <th style="width:120px;">角色</th>
+              <th style="width:260px;">操作</th>
+            </tr>
+            </thead>
+            <tbody id="userTbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- 其他菜单项先做占位，不影响你后续接入 -->
+    <section class="view hidden" id="view-movieType"><div class="panel"><div class="panel-title">电影类型</div></div></section>
+    <section class="view hidden" id="view-movieArea"><div class="panel"><div class="panel-title">电影区域</div></div></section>
+    <section class="view hidden" id="view-movieInfo"><div class="panel"><div class="panel-title">电影信息</div></div></section>
+    <section class="view hidden" id="view-trailer"><div class="panel"><div class="panel-title">电影预告视频</div></div></section>
+    <section class="view hidden" id="view-cast"><div class="panel"><div class="panel-title">演职人员</div></div></section>
+    <section class="view hidden" id="view-hall"><div class="panel"><div class="panel-title">影厅房间</div></div></section>
+    <section class="view hidden" id="view-show"><div class="panel"><div class="panel-title">放映记录</div></div></section>
+    <section class="view hidden" id="view-order"><div class="panel"><div class="panel-title">购票订单</div></div></section>
+    <section class="view hidden" id="view-comment"><div class="panel"><div class="panel-title">用户评价</div></div></section>
+    <section class="view hidden" id="view-notice"><div class="panel"><div class="panel-title">系统公告</div></div></section>
+  </main>
+</div>
+
+<script src="/admin/admin.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+
+</body>
+</html>

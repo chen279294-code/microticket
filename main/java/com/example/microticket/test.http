@@ -1,0 +1,14 @@
+POST http://localhost:8081/api/admin/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+###
+
+GET http://localhost:8081/api/admin/dashboard
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJ1aWQiOjEsInJvbGUiOiJBRE1JTiIsImV4cCI6MTc2OTk2MTU4Mn0.5TBYfZzQZvLJyaKWtDggD4nVxImZrY1foyegwAJRAtE
+
+###
